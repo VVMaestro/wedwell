@@ -14,12 +14,13 @@
   const secondCoords: LngLat = [65.38411343817563, 57.27367554542644];
 
   const coordinates = ref(firstCoords);
+  const zoom = ref(16);
 
   const form = reactive({
     name: '',
     email: '',
     attending: true,
-    dietaryRestrictions: '',
+    meal: '',
   });
 
   const scroll = ref(0);
@@ -28,12 +29,46 @@
     scroll.value = window.scrollY;
   };
 
+  const MS_IN_DAY = 86_400_000;
+  const MS_IN_HOUR = 3_600_000;
+  const MS_IN_MINUTE = 60000;
+  const MS_IN_SECOND = 1000;
+
+  const epochLeft = ref(0);
+  let timer: number | null = null;
+
+  const daysLeft = computed(() => Math.floor(epochLeft.value / MS_IN_DAY));
+  const hoursLeft = computed(() => Math.floor((epochLeft.value - daysLeft.value * MS_IN_DAY) / MS_IN_HOUR));
+  const minutesLeft = computed(() => Math.floor((epochLeft.value - daysLeft.value * MS_IN_DAY - hoursLeft.value * MS_IN_HOUR) / MS_IN_MINUTE));
+  const secondsLeft = computed(() => Math.floor((epochLeft.value - daysLeft.value * MS_IN_DAY - hoursLeft.value * MS_IN_HOUR - minutesLeft.value * MS_IN_MINUTE) / MS_IN_SECOND))
+
+  const startTimer = () => {
+    epochLeft.value = Math.max(Date.UTC(2025, 5, 11, 16, 0, 0, 0) - Date.now(), 0);
+
+    timer = setInterval(() => {
+      if (epochLeft.value > 0) {
+        epochLeft.value -= 1000;
+      } else {
+        stopTimer();
+      }
+    }, 1000);
+  };
+
+  const stopTimer = () => {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  };
+
   onMounted(() => {
     window.addEventListener('scroll', handleScroll);
+    startTimer();
   })
 
   onBeforeUnmount(() => {
     window.removeEventListener('scroll', handleScroll);
+    stopTimer();
   });
 </script>
 
@@ -46,14 +81,13 @@
           width="1920"
           height="1080"
           quality="80"
-          fit="cover"
           alt="Wedding background"
-          class="opacity-80"
+          class="opacity-80 object-cover w-[1920px] h-[1080px]"
           densities="x1 x2"
         />
       </div>
 
-      <div class="absolute inset-0 bg-gradient-to-b from-secondary/80 to-secondary/60" />
+      <div class="absolute inset-0 bg-gradient-to-b from-secondary/95 to-secondary/50" />
 
       <div class="container relative mx-auto px-4 text-center">
         <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-accent/10">
@@ -92,23 +126,23 @@
         <h2 class="mb-10 text-3xl font-bold text-muted-foreground">Counting Down to Our Special Day</h2>
 
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <el-card body-class="flex flex-col items-center justify-center p-6 bg-main-white">
-            <span class="text-3xl font-bold">85</span>
+          <el-card body-class="flex flex-col items-center justify-center p-6 bg-accent text-white">
+            <span class="text-3xl font-bold">{{ daysLeft }}</span>
             <span class="text-sm">Days</span>
           </el-card>
 
-          <el-card body-class="flex flex-col items-center justify-center p-6 bg-main-white">
-            <span class="text-3xl font-bold">12</span>
+          <el-card body-class="flex flex-col items-center justify-center p-6 bg-accent text-white">
+            <span class="text-3xl font-bold">{{ hoursLeft }}</span>
             <span class="text-sm">Hours</span>
           </el-card>
 
-          <el-card body-class="flex flex-col items-center justify-center p-6 bg-main-white">
-            <span class="text-3xl font-bold">45</span>
+          <el-card body-class="flex flex-col items-center justify-center p-6 bg-accent text-white">
+            <span class="text-3xl font-bold">{{ minutesLeft }}</span>
             <span class="text-sm">Minutes</span>
           </el-card>
 
-          <el-card body-class="flex flex-col items-center justify-center p-6 bg-main-white">
-            <span class="text-3xl font-bold">30</span>
+          <el-card body-class="flex flex-col items-center justify-center p-6 bg-accent text-white">
+            <span class="text-3xl font-bold">{{ secondsLeft }}</span>
             <span class="text-sm">Seconds</span>
           </el-card>
         </div>
@@ -116,13 +150,21 @@
     </section>
 
     <section class="py-16 relative">
-      <flower class="left-[15%] top-10 w-40 fill-flower" :scroll="scroll" :speed="0.1" />
+      <div class="absolute inset-0 -z-10 overflow-hidden">
+        <flower class="left-[15%] md:top-10 top-2 md:w-40 w-20 fill-flower" :scroll="scroll" :speed="0.1" />
 
-      <flower class="right-[15%] top-15 w-50 fill-flower-4" :scroll="scroll" :speed="0.15" />
+        <flower class="right-[10%] md:top-20 top-44 md:w-50 md:w-32 fill-flower-4" :scroll="scroll" :speed="0.15" />
 
-      <flower class="left-[25%] top-20 w-60 fill-flower-2" :scroll="scroll" :speed="0.05" />
+        <flower class="left-[25%] md:top-20 top-1 md:w-72 w-36 fill-flower-2" :scroll="scroll" :speed="0.05" type="two" turn />
 
-      <flower class="right-[10%] bottom-10 w-72 fill-flower-3" :scroll="scroll" :speed="0.05" />
+        <flower class="right-[15%] md:top-96 top-14 md:w-72 w-36 fill-flower-3" :scroll="scroll" :speed="0.05" type="two" />
+
+        <flower class="left-[10%] md:top-96 top-32 md:w-72 w-36 fill-flower-4" :scroll="scroll" :speed="0.02" type="two" />
+
+        <flower class="right-[5%] md:top-60 top-5 md:w-56 w-24 fill-flower-5" :scroll="scroll" :speed="0.2" turn />
+
+        <flower class="left-[2%] md:top-56 top-16 md:w-56 w-24 fill-flower-5" :scroll="scroll" :speed="0.1" turn type="two"/>
+      </div>
 
       <div class="mb-10 text-center">
         <h2 class="mb-4 text-3xl font-bold">Venue Locations</h2>
@@ -142,8 +184,8 @@
           :settings="{
             location: {
               center: coordinates,
-              zoom: 16,
-              duration: 1000,
+              zoom: zoom,
+              duration: 3000,
               easing: 'ease-in-out',
             },
             behaviors: [],
@@ -177,19 +219,19 @@
               <el-input v-model="form.name" class="font-normal" />
             </el-form-item>
 
-            <el-form-item label="Email" class="font-bold">
-              <el-input v-model="form.email" class="font-normal" />
-            </el-form-item>
-
             <el-form-item label="Will you be attending?" class="font-bold">
               <el-radio-group v-model="form.attending" class="font-normal">
                 <el-radio :value="true">Sure</el-radio>
-                <el-radio :value="false" fill="#67c23a">Nope</el-radio>
+                <el-radio :value="false">Nope</el-radio>
               </el-radio-group>
             </el-form-item>
 
-            <el-form-item label="Dietary Restrictions" class="font-bold">
-              <el-input v-model="form.dietaryRestrictions" type="textarea" class="font-normal" />
+            <el-form-item label="Meal" class="font-bold">
+              <el-select v-model="form.meal" class="font-normal">
+                <el-option :value="'beef'" :label="'Говяжьи щёчки'" />
+                <el-option :value="'fish'" :label="'Сёмга'" />
+                <el-option :value="'chicken'" :label="'Курочка'" />
+              </el-select>
             </el-form-item>
 
             <el-form-item>

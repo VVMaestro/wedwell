@@ -6,6 +6,7 @@
   :root {
     --accent: 14 92% 60%;
     --secondary: 100 92% 81%;
+    --thirdary: #FFEF9F;
     --el-color-primary: #F7673B;
     --el-color-primary-light-3: #F8764F;
     --el-color-primary-light-5: #F88562;
@@ -27,6 +28,7 @@
     --flower-2: #FFD6E0;
     --flower-3: #7BF1A8;
     --flower-4: #C1FBA4;
+    --flower-5: #FFEF9F;
   }
 }
 
