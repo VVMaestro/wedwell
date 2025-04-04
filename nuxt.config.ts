@@ -9,6 +9,12 @@ export default defineNuxtConfig({
     'vue-yandex-maps/nuxt'
   ],
   yandexMaps: {
-    apikey: '4675ea5c-7d13-424f-bd4d-6a1710b28dfc',
+    apikey: process.env.NUXT_YANDEX_MAPS_API_KEY,
+  },
+  runtimeConfig: {
+    public: {
+      pocketBaseUrl: '',
+    },
+    systemUserKey: '',
   },
 })
