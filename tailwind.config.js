@@ -6,7 +6,7 @@ export default {
       colors: {
         background: 'var(--background)',
         foreground: 'var(--foreground)',
-        muted: 'var(--muted)',
+        muted: 'hsl(var(--muted))',
         'main-white': 'var(--main-white)',
         accent: 'hsl(var(--accent))',
         secondary: 'hsl(var(--secondary))',

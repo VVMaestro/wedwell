@@ -13,14 +13,14 @@
     --el-color-primary-light-7: #F99576;
     --el-color-primary-light-8: #FBB39D;
     --el-color-primary-light-9: #FDD1C4;
-  
+
     --el-color-primary-dark-2: #F54914;
-  
+
     --foreground: #3E4E50;
     --background: #F7FFF7;
     /* E2ECE9 */
     /* FFD6E0 */
-    --muted: #E2ECE9;
+    --muted: 162 4% 93%;
     --main-white: #F7FFF7;
     --muted-foreground: #3E4E50;
 

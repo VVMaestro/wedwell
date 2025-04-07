@@ -1,15 +1,13 @@
 <script setup lang="ts">
   import { HeartIcon, CalendarIcon, MapPinIcon } from 'lucide-vue-next';
-  import { 
+  import {
     YandexMap,
-    YandexMapDefaultFeaturesLayer, 
-    YandexMapDefaultSchemeLayer, 
+    YandexMapDefaultFeaturesLayer,
+    YandexMapDefaultSchemeLayer,
     YandexMapDefaultMarker,
-    YandexMapListener,
   } from 'vue-yandex-maps';
   import type { LngLat } from '@yandex/ymaps3-types';
-  import { z } from 'zod';
-  import PocketBase from 'pocketbase';
+  import type {IForm} from "~/types/IForm";
 
   definePageMeta({
     middleware: ['auth'],
@@ -19,24 +17,19 @@
 
   const authId = params['authId'];
 
-  const nuxtApp = useNuxtApp();
-
   const firstCoords: LngLat = [65.56256758019137, 57.13613331616409];
   const secondCoords: LngLat = [65.38411343817563, 57.27367554542644];
 
   const coordinates = ref(firstCoords);
   const zoom = ref(16);
 
-  interface IForm {
-    name: string;
-    attending: boolean;
-    meal: string;
-  }
+  const rscv = useTemplateRef('rscv');
 
   const form = reactive<IForm>({
     name: '',
     attending: true,
     meal: '',
+    drink: '',
   });
 
   const scroll = ref(0);
@@ -79,10 +72,26 @@
   };
 
   const submitForm = async (form: IForm) => {
-    const { meal, name, attending } = form;
-    const nuxtApp = useNuxtApp();
+    try {
+      const {meal, name, attending, drink} = form;
 
-    await nuxtApp.$pb.collection('guests').update(authId as string, { meal, name, attending });
+      await $fetch('/api/submit', {
+        method: 'post',
+        body: {
+          meal,
+          name,
+          drink,
+          attending,
+          authId
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onRSCVClick = () => {
+    rscv.value?.scrollIntoView({ behavior: 'smooth' });
   };
 
   onMounted(() => {
@@ -100,7 +109,7 @@
   <main class="flex min-h-screen flex-col">
     <section class="relative flex flex-col items-center min-h-screen overflow-hidden py-16">
       <div class="absolute inset-0 z-0">
-        <nuxt-img 
+        <nuxt-img
           src="/P6084338.JPG"
           width="1920"
           height="1080"
@@ -139,7 +148,7 @@
             <span class="text-lg">The Grand Ballroom, New York</span>
           </div>
         </div>
-        <el-button size="large" round type="primary">
+        <el-button size="large" round type="primary" @click="onRSCVClick">
           RSVP Now
         </el-button>
       </div>
@@ -175,13 +184,13 @@
 
     <section class="py-16 relative">
       <div class="absolute inset-0 -z-10 overflow-hidden">
-        <flower class="left-[15%] md:top-10 top-2 md:w-40 w-20 fill-flower" :scroll="scroll" :speed="0.1" />
+        <flower class="md:left-[15%] left-[10%] md:top-10 top-2 md:w-40 w-20 fill-flower" :scroll="scroll" :speed="0.1" />
 
         <flower class="right-[10%] md:top-20 top-44 md:w-50 md:w-32 fill-flower-4" :scroll="scroll" :speed="0.15" />
 
         <flower class="left-[25%] md:top-20 top-1 md:w-72 w-36 fill-flower-2" :scroll="scroll" :speed="0.05" type="two" turn />
 
-        <flower class="right-[15%] md:top-96 top-14 md:w-72 w-36 fill-flower-3" :scroll="scroll" :speed="0.05" type="two" />
+        <flower class="md:right-[15%] right-[20%] md:top-96 top-20 md:w-72 w-36 fill-flower-3" :scroll="scroll" :speed="0.05" type="two" />
 
         <flower class="left-[10%] md:top-96 top-32 md:w-72 w-36 fill-flower-4" :scroll="scroll" :speed="0.02" type="two" />
 
@@ -221,47 +230,73 @@
 
           <yandex-map-default-features-layer />
 
-          <!-- <yandex-map-listener :settings="{onClick: (object, event) => console.log(event.coordinates)}" /> -->
-
           <yandex-map-default-marker :settings="{ coordinates: coordinates }"/>
         </yandex-map>
       </div>
     </section>
 
-    <section class="bg-muted py-16">
-      <div class="container mx-auto px-4">
-        <div class="mb-10 text-center">
-          <h2 class="mb-4 text-3xl font-bold text-muted-foreground">RSVP</h2>
-          <p class="mx-auto max-w-2xl text-muted-foreground">
-            Please let us know if you'll be joining us on our special day by May 1, 2025
-          </p>
-        </div>
+    <section class="bg-muted relative min-h-screen">
+      <div class="absolute inset-0 z-0 overflow-hidden">
+        <flower class="left-[15%] md:top-10 top-2 md:w-40 w-20 fill-white" :scroll="scroll" :speed="0.1" type="two" turn />
 
-        <div class="mx-auto max-w-2xl rounded-lg bg-main-white p-6 shadow-lg">
-          <el-form :model="form" label-position="top" size="large">
-            <el-form-item label="Full Name" class="font-bold">
-              <el-input v-model="form.name" class="font-normal" />
-            </el-form-item>
+        <flower class="right-[10%] md:top-20 top-[80%] md:w-50 md:w-32 fill-white" :scroll="scroll" :speed="0.15" type="two" turn />
 
-            <el-form-item label="Will you be attending?" class="font-bold">
-              <el-radio-group v-model="form.attending" class="font-normal">
-                <el-radio :value="true">Sure</el-radio>
-                <el-radio :value="false">Nope</el-radio>
-              </el-radio-group>
-            </el-form-item>
+        <flower class="left-[25%] md:top-20 top-1 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.05" type="two" />
 
-            <el-form-item label="Meal" class="font-bold">
-              <el-select v-model="form.meal" class="font-normal">
-                <el-option :value="'beef'" :label="'Говяжьи щёчки'" />
-                <el-option :value="'fish'" :label="'Сёмга'" />
-                <el-option :value="'chicken'" :label="'Курочка'" />
-              </el-select>
-            </el-form-item>
+        <flower class="right-[15%] md:top-[60%] top-14 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.05" type="one" turn />
 
-            <el-form-item>
-              <el-button class="w-full" type="primary" @click="submitForm(form)">Done</el-button>
-            </el-form-item>
-          </el-form>
+        <flower class="left-[10%] md:top-[50%] top-[80%] md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.02" type="one" turn />
+
+        <flower class="right-[5%] md:top-60 top-0 md:w-56 w-24 fill-white" :scroll="scroll" :speed="0.2" type="two" />
+
+        <flower class="left-[2%] md:top-56 top-16 md:w-56 w-24 fill-white" :scroll="scroll" :speed="0.1" />
+      </div>
+
+      <div class="absolute inset-0 z-10 py-16" ref="rscv">
+        <div class="container mx-auto px-4">
+          <div class="mb-10 text-center">
+            <h2 class="mb-4 text-3xl font-bold text-muted-foreground">RSVP</h2>
+            <p class="mx-auto max-w-2xl text-muted-foreground">
+              Please let us know if you'll be joining us on our special day by May 1, 2025
+            </p>
+          </div>
+
+          <div class="mx-auto max-w-2xl rounded-lg bg-main-white p-6 shadow-lg">
+            <el-form :model="form" label-position="top" size="large">
+              <el-form-item label="Full Name" class="font-bold">
+                <el-input v-model="form.name" class="font-normal" />
+              </el-form-item>
+
+              <el-form-item label="Will you be attending?" class="font-bold">
+                <el-radio-group v-model="form.attending" class="font-normal">
+                  <el-radio :value="true">Sure</el-radio>
+                  <el-radio :value="false">Nope</el-radio>
+                </el-radio-group>
+              </el-form-item>
+
+              <el-form-item label="Meal" class="font-bold">
+                <el-select v-model="form.meal" class="font-normal">
+                  <el-option :value="'beef'" :label="'Говяжьи щёчки'" />
+                  <el-option :value="'fish'" :label="'Сёмга'" />
+                  <el-option :value="'chicken'" :label="'Курочка'" />
+                </el-select>
+              </el-form-item>
+
+              <el-form-item label="Что предпочтёте пить?" class="font-bold">
+                <el-select v-model="form.drink" class="font-normal">
+                  <el-option :value="'vodka'" :label="'Водку'" />
+                  <el-option :value="'white-vine'" :label="'Белое Вино'" />
+                  <el-option :value="'red-vine'" :label="'Красное Вино'" />
+                  <el-option :value="'whisky'" :label="'Виски'" />
+                  <el-option :value="'cognac'" :label="'Коньяк'" />
+                </el-select>
+              </el-form-item>
+
+              <el-form-item>
+                <el-button class="w-full" type="primary" @click="submitForm(form)">Done</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
         </div>
       </div>
     </section>

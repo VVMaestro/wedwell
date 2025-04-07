@@ -13,7 +13,7 @@ export default defineEventHandler(async (event) => {
     throw createError({
       statusCode: 400,
       statusMessage: 'Auth id must be provided'
-    })
+    });
   }
 
   const pb = new PocketBase(pocketBaseUrl);
