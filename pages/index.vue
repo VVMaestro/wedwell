@@ -1,13 +1,21 @@
 <script setup lang="ts">
-  import { HeartIcon, CalendarIcon, MapPinIcon } from 'lucide-vue-next';
+  import {
+    HeartIcon,
+    CalendarIcon,
+    MapPinIcon,
+    HandHeartIcon,
+    PenLineIcon,
+    PartyPopperIcon
+  } from 'lucide-vue-next';
   import {
     YandexMap,
     YandexMapDefaultFeaturesLayer,
     YandexMapDefaultSchemeLayer,
-    YandexMapDefaultMarker,
+    YandexMapMarker,
   } from 'vue-yandex-maps';
+  import ConfettiExplosion from 'vue-confetti-explosion';
   import type { LngLat } from '@yandex/ymaps3-types';
-  import type {IForm} from "~/types/IForm";
+  import type { IForm } from "~/types/IForm";
 
   definePageMeta({
     middleware: ['auth'],
@@ -18,7 +26,8 @@
   const authId = params['authId'];
 
   const firstCoords: LngLat = [65.56256758019137, 57.13613331616409];
-  const secondCoords: LngLat = [65.38411343817563, 57.27367554542644];
+  const secondCoords: LngLat = [65.399308, 57.274270];
+  const islandCoords: LngLat = [28.732927, 60.733786]
 
   const coordinates = ref(firstCoords);
   const zoom = ref(16);
@@ -29,8 +38,27 @@
     name: '',
     attending: true,
     meal: '',
-    drink: '',
+    drink: [],
   });
+
+  watch(() => form.attending, () => {
+    form.meal = '';
+    form.drink = [];
+  });
+
+  const mealOptions = [
+    {value: 'chicken', label: 'Курица'},
+    {value: 'beef', label: 'Говяжьи щёчки'},
+    {value: 'fish', label: 'Форель'},
+  ];
+
+  const drinkOptions = [
+    {value: 'vodka', label: 'Водку'},
+    {value: 'white-vine', label: 'Белое Вино'},
+    {value: 'red-vine', label: 'Красное Вино'},
+    {value: 'whisky', label: 'Виски'},
+    {value: 'cognac', label: 'Коньяк'},
+  ];
 
   const scroll = ref(0);
 
@@ -71,9 +99,13 @@
     }
   };
 
+  const explode = ref(false);
+
   const submitForm = async (form: IForm) => {
     try {
       const {meal, name, attending, drink} = form;
+
+      explode.value = false;
 
       await $fetch('/api/submit', {
         method: 'post',
@@ -85,6 +117,8 @@
           authId
         }
       });
+
+      explode.value = true;
     } catch (error) {
       console.error(error);
     }
@@ -127,17 +161,17 @@
           <heart-icon class="h-8 w-8 text-accent" />
         </div>
 
-        <h1 class="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">Valentin & Marina</h1>
+        <h1 class="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">Валентин & Марина</h1>
 
-        <p class="mb-2 text-2xl font-medium">Request the pleasure of your company</p>
+        <p class="mb-2 text-2xl font-medium">Хотят, чтобы вы составили им компанию</p>
 
-        <p class="mb-8 text-2xl font-light text-muted-foreground">as they celebrate their marriage</p>
+        <p class="mb-8 text-2xl font-light text-muted-foreground">на их свадьбе</p>
 
         <div class="mb-10 flex flex-col items-center justify-center space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0">
           <div class="flex items-center space-x-2">
             <calendar-icon class="h-5 w-5 text-accent" />
 
-            <span class="text-lg">June 11, 2025 • 4:00 PM</span>
+            <span class="text-lg">11 июня 2025 • 16:00</span>
           </div>
 
           <div class="hidden sm:block">•</div>
@@ -145,38 +179,38 @@
           <div class="flex items-center space-x-2">
             <map-pin-icon class="h-5 w-5 text-accent" />
 
-            <span class="text-lg">The Grand Ballroom, New York</span>
+            <span class="text-lg">ЗАГС, Малыгина 85, Тюмень</span>
           </div>
         </div>
         <el-button size="large" round type="primary" @click="onRSCVClick">
-          RSVP Now
+          Дать ответ
         </el-button>
       </div>
     </section>
 
     <section class="bg-muted py-12">
       <div class="container mx-auto px-4 text-center">
-        <h2 class="mb-10 text-3xl font-bold text-muted-foreground">Counting Down to Our Special Day</h2>
+        <h2 class="mb-10 text-3xl font-bold text-muted-foreground">Отсчёт до особого дня</h2>
 
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <el-card body-class="flex flex-col items-center justify-center p-6 bg-accent text-white">
             <span class="text-3xl font-bold">{{ daysLeft }}</span>
-            <span class="text-sm">Days</span>
+            <span class="text-sm">Дней</span>
           </el-card>
 
           <el-card body-class="flex flex-col items-center justify-center p-6 bg-accent text-white">
             <span class="text-3xl font-bold">{{ hoursLeft }}</span>
-            <span class="text-sm">Hours</span>
+            <span class="text-sm">Часов</span>
           </el-card>
 
           <el-card body-class="flex flex-col items-center justify-center p-6 bg-accent text-white">
             <span class="text-3xl font-bold">{{ minutesLeft }}</span>
-            <span class="text-sm">Minutes</span>
+            <span class="text-sm">Минут</span>
           </el-card>
 
           <el-card body-class="flex flex-col items-center justify-center p-6 bg-accent text-white">
             <span class="text-3xl font-bold">{{ secondsLeft }}</span>
-            <span class="text-sm">Seconds</span>
+            <span class="text-sm">Секунд</span>
           </el-card>
         </div>
       </div>
@@ -200,16 +234,36 @@
       </div>
 
       <div class="mb-10 text-center">
-        <h2 class="mb-4 text-3xl font-bold">Venue Locations</h2>
-        <p class="mx-auto max-w-2xl text-foreground flex flex-col gap-2">
+        <h2 class="mb-4 text-3xl font-bold">Основные локации</h2>
+        <div class="mx-auto max-w-2xl text-foreground flex flex-col items-center gap-2">
+          <el-button size="large" round plain @click="() => {coordinates = islandCoords}">
+            <template #icon>
+              <hand-heart-icon class="stroke-accent" />
+            </template>
+
+            <span class="font-bold">Предложение - о. Палатки</span>
+          </el-button>
+
+          <el-divider class="max-w-32 !my-2">
+            <heart-icon class="stroke-accent w-4 h-auto" />
+          </el-divider>
+
           <el-button size="large" @click="() => {coordinates = firstCoords}" round plain>
-            <span class="font-bold">The Zags, 123 Wedding Avenue, New York</span>
+            <template #icon>
+              <pen-line-icon class="stroke-accent" />
+            </template>
+
+            <span class="font-bold">Роспись - Загс</span>
           </el-button>
 
           <el-button size="large" @click="() => {coordinates = secondCoords}" round plain>
-            <span class="font-bold">The Warm, 123 Wedding Avenue, New York</span>
+            <template #icon>
+              <party-popper-icon class="stroke-accent" />
+            </template>
+
+            <span class="font-bold">Банкет - Тепло</span>
           </el-button>
-        </p>
+        </div>
       </div>
 
       <div class="mx-auto max-w-4xl overflow-hidden rounded-lg shadow-lg">
@@ -221,7 +275,7 @@
               duration: 3000,
               easing: 'ease-in-out',
             },
-            behaviors: [],
+            behaviors: ['drag', 'pinchZoom'],
           }"
           width="100%"
           height="450px"
@@ -230,7 +284,9 @@
 
           <yandex-map-default-features-layer />
 
-          <yandex-map-default-marker :settings="{ coordinates: coordinates }"/>
+          <yandex-map-marker :settings="{ coordinates: coordinates }">
+            <heart-icon class="fill-accent stroke-accent w-20 h-auto -translate-x-10 -translate-y-20" />
+          </yandex-map-marker>
         </yandex-map>
       </div>
     </section>
@@ -243,11 +299,11 @@
 
         <flower class="left-[25%] md:top-20 top-1 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.05" type="two" />
 
-        <flower class="right-[15%] md:top-[60%] top-14 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.05" type="one" turn />
+        <flower class="right-[10%] md:top-[60%] top-14 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.05" type="one" turn />
 
         <flower class="left-[10%] md:top-[50%] top-[80%] md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.02" type="one" turn />
 
-        <flower class="right-[5%] md:top-60 top-0 md:w-56 w-24 fill-white" :scroll="scroll" :speed="0.2" type="two" />
+        <flower class="right-[5%] md:top-60 -top-1 md:w-56 w-24 fill-white" :scroll="scroll" :speed="0.2" type="two" />
 
         <flower class="left-[2%] md:top-56 top-16 md:w-56 w-24 fill-white" :scroll="scroll" :speed="0.1" />
       </div>
@@ -255,45 +311,56 @@
       <div class="absolute inset-0 z-10 py-16" ref="rscv">
         <div class="container mx-auto px-4">
           <div class="mb-10 text-center">
-            <h2 class="mb-4 text-3xl font-bold text-muted-foreground">RSVP</h2>
+            <h2 class="mb-4 text-3xl font-bold text-muted-foreground">Дать ответ</h2>
             <p class="mx-auto max-w-2xl text-muted-foreground">
-              Please let us know if you'll be joining us on our special day by May 1, 2025
+              Пожалуйста, дайте нам знать до 1 мая 2025 г., присоединитесь ли вы к нам в наш особенный день
             </p>
           </div>
 
           <div class="mx-auto max-w-2xl rounded-lg bg-main-white p-6 shadow-lg">
             <el-form :model="form" label-position="top" size="large">
-              <el-form-item label="Full Name" class="font-bold">
-                <el-input v-model="form.name" class="font-normal" />
+              <el-form-item label="ФИО" class="font-bold">
+                <el-input v-model="form.name" class="font-normal" placeholder="Панов Валентин Иванович" />
               </el-form-item>
 
-              <el-form-item label="Will you be attending?" class="font-bold">
+              <el-form-item label="Будете присутствовать?" class="font-bold">
                 <el-radio-group v-model="form.attending" class="font-normal">
-                  <el-radio :value="true">Sure</el-radio>
-                  <el-radio :value="false">Nope</el-radio>
+                  <el-radio :value="true">Конечно</el-radio>
+                  <el-radio :value="false">Нет</el-radio>
                 </el-radio-group>
               </el-form-item>
 
-              <el-form-item label="Meal" class="font-bold">
-                <el-select v-model="form.meal" class="font-normal">
-                  <el-option :value="'beef'" :label="'Говяжьи щёчки'" />
-                  <el-option :value="'fish'" :label="'Сёмга'" />
-                  <el-option :value="'chicken'" :label="'Курочка'" />
-                </el-select>
+              <el-form-item label="Что предпочтёте есть?" class="font-bold">
+                <el-select-v2
+                  v-model="form.meal"
+                  class="font-normal"
+                  :options="mealOptions"
+                  :disabled="!form.attending"
+                  placeholder="Выберите одно"
+                />
               </el-form-item>
 
               <el-form-item label="Что предпочтёте пить?" class="font-bold">
-                <el-select v-model="form.drink" class="font-normal">
-                  <el-option :value="'vodka'" :label="'Водку'" />
-                  <el-option :value="'white-vine'" :label="'Белое Вино'" />
-                  <el-option :value="'red-vine'" :label="'Красное Вино'" />
-                  <el-option :value="'whisky'" :label="'Виски'" />
-                  <el-option :value="'cognac'" :label="'Коньяк'" />
-                </el-select>
+                <el-select-v2
+                  v-model="form.drink"
+                  class="font-normal"
+                  :options="drinkOptions"
+                  multiple
+                  :disabled="!form.attending"
+                  placeholder="Выберите один или несколько"
+                />
               </el-form-item>
 
               <el-form-item>
-                <el-button class="w-full" type="primary" @click="submitForm(form)">Done</el-button>
+                <div class="flex flex-col w-full items-center">
+                  <el-button class="w-full" type="primary" @click="submitForm(form)">Done</el-button>
+
+                  <confetti-explosion
+                      v-if="explode"
+                      :particleCount="50"
+                      :colors="['var(--flower)', 'var(--flower-2)', 'var(--flower-3)', 'var(--flower-4)', 'var(--flower-5)']"
+                  />
+                </div>
               </el-form-item>
             </el-form>
           </div>
