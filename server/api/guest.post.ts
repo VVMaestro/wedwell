@@ -20,7 +20,5 @@ export default defineEventHandler(async (event) => {
 
   await pb.collection('users').authWithPassword('system@system.com', systemUserKey);
 
-  const guest = await pb.collection('guests').getOne(authId);
-
-  return guest;
+  return pb.collection('guests').getOne(authId);
 })

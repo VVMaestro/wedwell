@@ -3,7 +3,6 @@
     HeartIcon,
     CalendarIcon,
     MapPinIcon,
-    HandHeartIcon,
     PenLineIcon,
     PartyPopperIcon
   } from 'lucide-vue-next';
@@ -16,6 +15,8 @@
   import ConfettiExplosion from 'vue-confetti-explosion';
   import type { LngLat } from '@yandex/ymaps3-types';
   import type { IForm } from "~/types/IForm";
+  import type {IGuest} from "~/types/IGuest";
+  import type {FormInstance, FormRules} from 'element-plus';
 
   definePageMeta({
     middleware: ['auth'],
@@ -27,7 +28,6 @@
 
   const firstCoords: LngLat = [65.56256758019137, 57.13613331616409];
   const secondCoords: LngLat = [65.399308, 57.274270];
-  const islandCoords: LngLat = [28.732927, 60.733786]
 
   const coordinates = ref(firstCoords);
   const zoom = ref(16);
@@ -37,14 +37,32 @@
   const form = reactive<IForm>({
     name: '',
     attending: true,
-    meal: '',
-    drink: [],
+    meal: null,
+    drink: null,
   });
 
   watch(() => form.attending, () => {
-    form.meal = '';
-    form.drink = [];
+    form.meal = null;
+    form.drink = null;
   });
+
+  const formRef = ref<FormInstance>();
+
+  const formRules = computed<FormRules<IForm>>(() => ({
+    name: [
+      { required: true, message: 'Заполните имя', trigger: 'blur' },
+      { min: 1, max: 100, message: 'От 1 до 100 символов', trigger: 'blur'},
+    ],
+    attending: [
+      { required: true, message: 'Выберите', trigger: 'blur' },
+    ],
+    meal: [
+      { required: form.attending, message: 'Выберите еду', trigger: 'blur' },
+    ],
+    drink: [
+      { type: 'array', required: form.attending, message: 'Выберите хотя бы один напиток', trigger: 'blur' }
+    ]
+  }));
 
   const mealOptions = [
     {value: 'chicken', label: 'Курица'},
@@ -103,30 +121,56 @@
 
   const submitForm = async (form: IForm) => {
     try {
-      const {meal, name, attending, drink} = form;
+      if (!formRef.value) {
+        return;
+      }
 
-      explode.value = false;
+      await formRef.value.validate(async (isValid) => {
+        if (!isValid) {
+          ElNotification.error({ title: 'Проверьте правильно ли заполнена форма' });
 
-      await $fetch('/api/submit', {
-        method: 'post',
-        body: {
-          meal,
-          name,
-          drink,
-          attending,
-          authId
+          return;
         }
-      });
 
-      explode.value = true;
+        const {meal, name, attending, drink} = form;
+
+        explode.value = false;
+
+        await $fetch('/api/submit', {
+          method: 'post',
+          body: {
+            meal,
+            name,
+            drink,
+            attending,
+            authId
+          }
+        });
+
+        explode.value = true;
+
+        ElNotification.success({
+          title: attending ? 'Отлично!' : 'Очень жаль',
+          message: attending ? 'Будем вас ждать' : 'Возможно вы передумаете'
+        });
+      });
     } catch (error) {
-      console.error(error);
+      ElNotification.error({ title: 'Непредвиденная ошибка', message: `${error}` });
     }
   };
 
   const onRSCVClick = () => {
     rscv.value?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  const {data} = await useFetch<IGuest>('/api/guest', { method: 'post', body: { authId: authId } });
+
+  if (data.value) {
+    form.meal = data.value.meal ?? '';
+    form.drink = data.value.drink ?? [];
+    form.attending = data.value.attending;
+    form.name = data.value.name ?? '';
+  }
 
   onMounted(() => {
     window.addEventListener('scroll', handleScroll);
@@ -236,18 +280,6 @@
       <div class="mb-10 text-center">
         <h2 class="mb-4 text-3xl font-bold">Основные локации</h2>
         <div class="mx-auto max-w-2xl text-foreground flex flex-col items-center gap-2">
-          <el-button size="large" round plain @click="() => {coordinates = islandCoords}">
-            <template #icon>
-              <hand-heart-icon class="stroke-accent" />
-            </template>
-
-            <span class="font-bold">Предложение - о. Палатки</span>
-          </el-button>
-
-          <el-divider class="max-w-32 !my-2">
-            <heart-icon class="stroke-accent w-4 h-auto" />
-          </el-divider>
-
           <el-button size="large" @click="() => {coordinates = firstCoords}" round plain>
             <template #icon>
               <pen-line-icon class="stroke-accent" />
@@ -318,19 +350,26 @@
           </div>
 
           <div class="mx-auto max-w-2xl rounded-lg bg-main-white p-6 shadow-lg">
-            <el-form :model="form" label-position="top" size="large">
-              <el-form-item label="ФИО" class="font-bold">
+            <el-form
+              :model="form"
+              label-position="top"
+              size="large"
+              ref="formRef"
+              :rules="formRules"
+              status-icon
+            >
+              <el-form-item label="ФИО" class="font-bold" prop="name">
                 <el-input v-model="form.name" class="font-normal" placeholder="Панов Валентин Иванович" />
               </el-form-item>
 
-              <el-form-item label="Будете присутствовать?" class="font-bold">
+              <el-form-item label="Будете присутствовать?" class="font-bold" prop="attending">
                 <el-radio-group v-model="form.attending" class="font-normal">
                   <el-radio :value="true">Конечно</el-radio>
                   <el-radio :value="false">Нет</el-radio>
                 </el-radio-group>
               </el-form-item>
 
-              <el-form-item label="Что предпочтёте есть?" class="font-bold">
+              <el-form-item label="Что предпочтёте есть?" class="font-bold" prop="meal">
                 <el-select-v2
                   v-model="form.meal"
                   class="font-normal"
@@ -340,7 +379,7 @@
                 />
               </el-form-item>
 
-              <el-form-item label="Что предпочтёте пить?" class="font-bold">
+              <el-form-item label="Что предпочтёте пить?" class="font-bold" prop="drink">
                 <el-select-v2
                   v-model="form.drink"
                   class="font-normal"
