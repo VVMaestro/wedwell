@@ -328,8 +328,10 @@
       </div>
     </section>
 
-    <section class="bg-muted relative min-h-screen">
-      <div class="absolute inset-0 z-0 overflow-hidden">
+    <section class="relative min-h-screen">
+      <div class="bg-muted absolute inset-0 -z-20 overflow-hidden" />
+
+      <div class="absolute inset-0 -z-10 overflow-hidden">
         <flower class="left-[15%] md:top-10 top-2 md:w-40 w-20 fill-white" :scroll="scroll" :speed="0.1" type="two" turn />
 
         <flower class="right-[10%] md:top-20 top-[80%] md:w-50 md:w-32 fill-white" :scroll="scroll" :speed="0.15" type="two" turn />
@@ -345,7 +347,7 @@
         <flower class="left-[2%] md:top-56 top-16 md:w-56 w-24 fill-white" :scroll="scroll" :speed="0.1" />
       </div>
 
-      <div class="absolute inset-0 z-10 py-16" ref="rscv">
+      <div class="py-16" ref="rscv">
         <div class="container mx-auto px-4">
           <div class="mb-10 text-center">
             <h2 class="mb-4 text-3xl font-bold text-muted-foreground">Дать ответ</h2>
