@@ -3,4 +3,5 @@ export interface IGuest {
     drink?: string[];
     name?: string;
     attending: boolean;
+    comment?: string;
 }

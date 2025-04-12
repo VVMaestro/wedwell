@@ -171,10 +171,11 @@
   const {data} = await useFetch<IGuest>('/api/guest', { method: 'post', body: { authId: authId } });
 
   if (data.value) {
-    form.meal = data.value.meal ?? '';
-    form.drink = data.value.drink ?? [];
+    form.meal = data.value.meal ?? null;
+    form.drink = data.value.drink ?? null;
     form.attending = data.value.attending;
     form.name = data.value.name ?? '';
+    form.comment = data.value.comment ?? null;
   }
 
   onMounted(() => {
