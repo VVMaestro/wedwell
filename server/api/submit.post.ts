@@ -7,7 +7,8 @@ export default defineEventHandler(async (event) => {
         attending,
         meal,
         name,
-        drink
+        drink,
+        comment,
     } = await readBody<IForm & {authId: string;}>(event);
 
     if (!authId) {
@@ -35,5 +36,11 @@ export default defineEventHandler(async (event) => {
         });
     }
 
-    await pb.collection('guests').update(authId as string, { meal, name, attending, drink });
+    await pb.collection('guests').update(authId as string, {
+        meal,
+        name,
+        attending,
+        drink,
+        comment,
+    });
 });

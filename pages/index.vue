@@ -39,6 +39,7 @@
     attending: true,
     meal: null,
     drink: null,
+    comment: null,
   });
 
   watch(() => form.attending, () => {
@@ -61,7 +62,10 @@
     ],
     drink: [
       { type: 'array', required: form.attending, message: 'Выберите хотя бы один напиток', trigger: 'blur' }
-    ]
+    ],
+    comment: [
+      { max: 1000, message: 'Максимум 1000 символов', trigger: 'blur' },
+    ],
   }));
 
   const mealOptions = [
@@ -132,7 +136,7 @@
           return;
         }
 
-        const {meal, name, attending, drink} = form;
+        const {meal, name, attending, drink, comment} = form;
 
         explode.value = false;
 
@@ -143,7 +147,8 @@
             name,
             drink,
             attending,
-            authId
+            authId,
+            comment,
           }
         });
 
@@ -390,9 +395,22 @@
                 />
               </el-form-item>
 
+              <el-form-item label="Комментарий" class="font-bold" prop="comment">
+                <el-input
+                  v-model="form.comment"
+                  class="font-normal"
+                  placeholder="Всё, что сочтёте важным упомять"
+                  type="textarea"
+                  maxlength="1000"
+                  show-word-limit
+                  resize="none"
+                  :rows="4"
+                ></el-input>
+              </el-form-item>
+
               <el-form-item>
                 <div class="flex flex-col w-full items-center">
-                  <el-button class="w-full" type="primary" @click="submitForm(form)">Done</el-button>
+                  <el-button class="w-full" type="primary" @click="submitForm(form)">Ответить</el-button>
 
                   <confetti-explosion
                       v-if="explode"

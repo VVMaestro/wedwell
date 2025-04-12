@@ -3,4 +3,5 @@ export interface IForm {
     attending: boolean;
     meal: string | null;
     drink: string[] | null;
+    comment: string | null;
 }
