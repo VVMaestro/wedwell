@@ -213,15 +213,15 @@
 
         <h1 class="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">Валентин & Марина</h1>
 
-        <p class="mb-2 text-2xl font-medium">Хотят, чтобы вы составили им компанию</p>
+        <p class="mb-2 text-2xl font-medium">Мы хотим, чтобы вы составили нам компанию</p>
 
-        <p class="mb-8 text-2xl font-light text-muted-foreground">на их свадьбе</p>
+        <p class="mb-8 text-2xl font-light text-muted-foreground">на нашей свадьбе</p>
 
         <div class="mb-10 flex flex-col items-center justify-center space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0">
           <div class="flex items-center space-x-2">
             <calendar-icon class="h-5 w-5 text-accent" />
 
-            <span class="text-lg">11 июня 2025 • 16:00</span>
+            <span class="text-lg">11 июня 2025 • 15:45</span>
           </div>
 
           <div class="hidden sm:block">•</div>
@@ -233,14 +233,14 @@
           </div>
         </div>
         <el-button size="large" round type="primary" @click="onRSCVClick">
-          Дать ответ
+          Ваш ответ
         </el-button>
       </div>
     </section>
 
     <section class="bg-muted py-12">
       <div class="container mx-auto px-4 text-center">
-        <h2 class="mb-10 text-3xl font-bold text-muted-foreground">Отсчёт до особого дня</h2>
+        <h2 class="mb-10 text-3xl font-bold text-muted-foreground">До особого момента осталось</h2>
 
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <el-card body-class="flex flex-col items-center justify-center p-6 bg-accent text-white">
@@ -284,14 +284,14 @@
       </div>
 
       <div class="mb-10 text-center">
-        <h2 class="mb-4 text-3xl font-bold">Основные локации</h2>
+        <h2 class="mb-4 text-3xl font-bold">Наше торжество на карте</h2>
         <div class="mx-auto max-w-2xl text-foreground flex flex-col items-center gap-2">
           <el-button size="large" @click="() => {coordinates = firstCoords}" round plain>
             <template #icon>
               <pen-line-icon class="stroke-accent" />
             </template>
 
-            <span class="font-bold">Роспись - Загс</span>
+            <span class="font-bold">Церемония - Загс</span>
           </el-button>
 
           <el-button size="large" @click="() => {coordinates = secondCoords}" round plain>
@@ -299,7 +299,7 @@
               <party-popper-icon class="stroke-accent" />
             </template>
 
-            <span class="font-bold">Банкет - Тепло</span>
+            <span class="font-bold">Банкет - Территория отдыха 'Тепло'</span>
           </el-button>
         </div>
       </div>
@@ -333,27 +333,27 @@
       <div class="bg-muted absolute inset-0 -z-20 overflow-hidden" />
 
       <div class="absolute inset-0 -z-10 overflow-hidden">
-        <flower class="left-[15%] md:top-10 top-2 md:w-40 w-20 fill-white" :scroll="scroll" :speed="0.1" type="two" turn />
+        <flower class="left-[5%] md:top-10 top-2 md:w-40 w-20 fill-white" :scroll="scroll" :speed="0.1" type="two" turn />
 
         <flower class="right-[10%] md:top-20 top-[80%] md:w-50 md:w-32 fill-white" :scroll="scroll" :speed="0.15" type="two" turn />
 
-        <flower class="left-[25%] md:top-20 top-1 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.05" type="two" />
+        <flower class="left-[25%] md:top-20 top-0 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.05" type="two" />
 
         <flower class="right-[10%] md:top-[60%] top-14 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.05" type="one" turn />
 
-        <flower class="left-[10%] md:top-[50%] top-[80%] md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.02" type="one" turn />
+        <flower class="left-[10%] md:top-[50%] top-[90%] md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.02" type="one" turn />
 
         <flower class="right-[5%] md:top-60 -top-1 md:w-56 w-24 fill-white" :scroll="scroll" :speed="0.2" type="two" />
 
-        <flower class="left-[2%] md:top-56 top-16 md:w-56 w-24 fill-white" :scroll="scroll" :speed="0.1" />
+        <flower class="left-[2%] md:top-56 top-24 md:w-56 w-24 fill-white" :scroll="scroll" :speed="0.1" />
       </div>
 
       <div class="py-16" ref="rscv">
         <div class="container mx-auto px-4">
           <div class="mb-10 text-center">
-            <h2 class="mb-4 text-3xl font-bold text-muted-foreground">Дать ответ</h2>
+            <h2 class="mb-4 text-3xl font-bold text-muted-foreground">Ваш ответ</h2>
             <p class="mx-auto max-w-2xl text-muted-foreground">
-              Пожалуйста, дайте нам знать до 1 мая 2025 г., присоединитесь ли вы к нам в наш особенный день
+              Пожалуйста, дайте нам знать <br> до 11 мая 2025 г.
             </p>
           </div>
 
@@ -366,14 +366,14 @@
               :rules="formRules"
               status-icon
             >
-              <el-form-item label="ФИО" class="font-bold" prop="name">
+              <el-form-item label="Ваше имя" class="font-bold" prop="name">
                 <el-input v-model="form.name" class="font-normal" placeholder="Панов Валентин Иванович" />
               </el-form-item>
 
-              <el-form-item label="Будете присутствовать?" class="font-bold" prop="attending">
+              <el-form-item label="Вы с нами?" class="font-bold" prop="attending">
                 <el-radio-group v-model="form.attending" class="font-normal">
-                  <el-radio :value="true">Конечно</el-radio>
-                  <el-radio :value="false">Нет</el-radio>
+                  <el-radio :value="true">Конечно, да</el-radio>
+                  <el-radio :value="false">К сожалению, нет</el-radio>
                 </el-radio-group>
               </el-form-item>
 
@@ -383,7 +383,7 @@
                   class="font-normal"
                   :options="mealOptions"
                   :disabled="!form.attending"
-                  placeholder="Выберите одно"
+                  placeholder="Выберите горячее блюдо"
                 />
               </el-form-item>
 
@@ -394,7 +394,7 @@
                   :options="drinkOptions"
                   multiple
                   :disabled="!form.attending"
-                  placeholder="Выберите один или несколько"
+                  placeholder="Выберите один или несколько напитков"
                 />
               </el-form-item>
 
@@ -402,7 +402,7 @@
                 <el-input
                   v-model="form.comment"
                   class="font-normal"
-                  placeholder="Всё, что сочтёте важным упомять"
+                  placeholder="Напишите, если будет +1 или дети. А также всё, что сочтёте важным упомянуть, или любой вопрос"
                   type="textarea"
                   maxlength="1000"
                   show-word-limit
