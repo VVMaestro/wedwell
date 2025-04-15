@@ -17,6 +17,10 @@ export default {
         'flower-3': 'var(--flower-3)',
         'flower-4': 'var(--flower-4)',
         'flower-5': 'var(--flower-5)',
+      },
+      fontFamily: {
+        belota: 'var(--font-belota)',
+        wenkai: 'var(--font-wenkai)',
       }
     },
   },

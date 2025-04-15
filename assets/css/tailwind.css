@@ -29,10 +29,45 @@
     --flower-3: #7BF1A8;
     --flower-4: #C1FBA4;
     --flower-5: #FFEF9F;
+
+    --font-belota: "Bellota", Helvetica, sans-serif;
+    --font-wenkai: "Wenkai", Helvetica, sans-serif;
   }
 }
 
 @layer base {
+  @font-face {
+    font-family: 'Bellota';
+    src: url('/public/fonts/Bellota-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Bellota';
+    src: url('/public/fonts/Bellota-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Wenkai';
+    src: url('/public/fonts/LXGWWenKaiMonoTC-Regular.woff2') format('woff2');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Wenkai';
+    src: url('/public/fonts/LXGWWenKaiMonoTC-Bold.woff2') format('woff2');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+
   body {
     @apply bg-background text-foreground;
   }

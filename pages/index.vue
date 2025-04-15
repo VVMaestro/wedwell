@@ -190,7 +190,7 @@
 </script>
 
 <template>
-  <main class="flex min-h-screen flex-col">
+  <main class="flex min-h-screen flex-col font-wenkai">
     <section class="relative flex flex-col items-center min-h-screen overflow-hidden py-16">
       <div class="absolute inset-0 z-0">
         <nuxt-img
