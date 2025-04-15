@@ -270,13 +270,15 @@
       <div class="absolute inset-0 -z-10 overflow-hidden">
         <flower class="md:left-[15%] left-[10%] md:top-10 top-2 md:w-40 w-20 fill-flower" :scroll="scroll" :speed="0.1" />
 
-        <flower class="right-[10%] md:top-20 top-44 md:w-50 md:w-32 fill-flower-4" :scroll="scroll" :speed="0.15" />
+        <flower class="right-[10%] md:top-20 top-52 md:w-50 md:w-32 fill-flower-4" :scroll="scroll" :speed="0.15" />
 
-        <flower class="left-[25%] md:top-20 top-1 md:w-72 w-36 fill-flower-2" :scroll="scroll" :speed="0.05" type="two" turn />
+        <flower class="right-[1%] md:top-20 top-32 md:w-50 md:w-32 fill-flower" :scroll="scroll" :speed="0.25" type="two" turn />
 
-        <flower class="md:right-[15%] right-[20%] md:top-96 top-20 md:w-72 w-36 fill-flower-3" :scroll="scroll" :speed="0.05" type="two" />
+        <flower class="left-[25%] md:top-20 top-1 md:w-72 w-36 fill-flower-2" :scroll="scroll" :speed="0.08" type="two" turn />
 
-        <flower class="left-[10%] md:top-96 top-32 md:w-72 w-36 fill-flower-4" :scroll="scroll" :speed="0.02" type="two" />
+        <flower class="md:right-[15%] right-[20%] md:top-96 top-20 md:w-72 w-36 fill-flower-3" :scroll="scroll" :speed="0.08" type="two" />
+
+        <flower class="left-[2%] md:top-96 top-32 md:w-72 w-36 fill-flower-4" :scroll="scroll" :speed="0.08" type="two" />
 
         <flower class="right-[5%] md:top-60 top-5 md:w-56 w-24 fill-flower-5" :scroll="scroll" :speed="0.2" turn />
 
@@ -339,9 +341,9 @@
 
         <flower class="left-[25%] md:top-20 top-0 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.05" type="two" />
 
-        <flower class="right-[10%] md:top-[60%] top-14 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.05" type="one" turn />
+        <flower class="right-[10%] md:top-[60%] top-14 md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.07" type="one" turn />
 
-        <flower class="left-[10%] md:top-[50%] top-[90%] md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.02" type="one" turn />
+        <flower class="left-[10%] md:top-[50%] top-[90%] md:w-72 w-36 fill-white" :scroll="scroll" :speed="0.06" type="one" turn />
 
         <flower class="right-[5%] md:top-60 -top-1 md:w-56 w-24 fill-white" :scroll="scroll" :speed="0.2" type="two" />
 
