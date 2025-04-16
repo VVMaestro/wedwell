@@ -26,10 +26,12 @@
 
   const authId = params['authId'];
 
-  const firstCoords: LngLat = [65.56256758019137, 57.13613331616409];
+  const firstCoords: LngLat = [65.56256758019137, 57.135317];
+  const firstMarkerCoords: LngLat = [65.56256758019137, 57.13613331616409]
   const secondCoords: LngLat = [65.399308, 57.274270];
 
   const coordinates = ref(firstCoords);
+  const markerCoordinates = ref(firstMarkerCoords);
   const zoom = ref(16);
 
   const rscv = useTemplateRef('rscv');
@@ -288,20 +290,36 @@
       <div class="mb-10 text-center">
         <h2 class="mb-4 text-3xl font-bold">Наше торжество на карте</h2>
         <div class="mx-auto max-w-2xl text-foreground flex flex-col items-center gap-2">
-          <el-button size="large" @click="() => {coordinates = firstCoords}" round plain>
+          <el-button
+            size="large"
+            @click="() => {
+              coordinates = firstCoords;
+              markerCoordinates = firstMarkerCoords;
+            }"
+            round
+            plain
+          >
             <template #icon>
               <pen-line-icon class="stroke-accent" />
             </template>
 
-            <span class="font-bold">Церемония - Загс</span>
+            <span class="font-bold text-lg">Церемония - Загс</span>
           </el-button>
 
-          <el-button size="large" @click="() => {coordinates = secondCoords}" round plain>
+          <el-button
+            size="large"
+            @click="() => {
+              coordinates = secondCoords;
+              markerCoordinates = secondCoords;
+            }"
+            round
+            plain
+          >
             <template #icon>
               <party-popper-icon class="stroke-accent" />
             </template>
 
-            <span class="font-bold">Банкет - Территория отдыха 'Тепло'</span>
+            <span class="font-bold text-lg">Банкет - Территория отдыха 'Тепло'</span>
           </el-button>
         </div>
       </div>
@@ -324,7 +342,7 @@
 
           <yandex-map-default-features-layer />
 
-          <yandex-map-marker :settings="{ coordinates: coordinates }">
+          <yandex-map-marker :settings="{ coordinates: markerCoordinates }">
             <heart-icon class="fill-accent stroke-accent w-20 h-auto -translate-x-10 -translate-y-20" />
           </yandex-map-marker>
         </yandex-map>
