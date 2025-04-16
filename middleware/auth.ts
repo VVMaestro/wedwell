@@ -1,4 +1,6 @@
-export default defineNuxtRouteMiddleware(async(to, from) => {
+export default defineNuxtRouteMiddleware((to, from) => {
+  const config = useRuntimeConfig();
+
   const authId = to.query['authId'];
 
   if (!authId) {
@@ -6,10 +8,10 @@ export default defineNuxtRouteMiddleware(async(to, from) => {
   }
 
   try {
-    const { data } = await useFetch('/api/guest', { body: { authId }, method: 'post' });
-
-    if (!data.value) {
-      return navigateTo('/empty');
+    if (authId === config.guestUserKey) {
+      return;
+    } else {
+      navigateTo('/empty');
     }
   } catch (e) {
     console.log(e);

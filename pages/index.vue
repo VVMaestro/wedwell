@@ -15,7 +15,6 @@
   import ConfettiExplosion from 'vue-confetti-explosion';
   import type { LngLat } from '@yandex/ymaps3-types';
   import type { IForm } from "~/types/IForm";
-  import type {IGuest} from "~/types/IGuest";
   import type {FormInstance, FormRules} from 'element-plus';
 
   definePageMeta({
@@ -60,10 +59,10 @@
       { required: true, message: 'Выберите', trigger: 'blur' },
     ],
     meal: [
-      { required: form.attending, message: 'Выберите еду', trigger: 'blur' },
+      { required: form.attending, message: 'Выберите еду', trigger: 'change' },
     ],
     drink: [
-      { type: 'array', required: form.attending, message: 'Выберите хотя бы один напиток', trigger: 'blur' }
+      { type: 'array', required: form.attending, message: 'Выберите хотя бы один напиток', trigger: 'change' }
     ],
     comment: [
       { max: 1000, message: 'Максимум 1000 символов', trigger: 'blur' },
@@ -169,16 +168,6 @@
   const onRSCVClick = () => {
     rscv.value?.scrollIntoView({ behavior: 'smooth' });
   };
-
-  const {data} = await useFetch<IGuest>('/api/guest', { method: 'post', body: { authId: authId } });
-
-  if (data.value) {
-    form.meal = data.value.meal ?? null;
-    form.drink = data.value.drink ?? null;
-    form.attending = data.value.attending;
-    form.name = data.value.name ?? '';
-    form.comment = data.value.comment ?? null;
-  }
 
   onMounted(() => {
     window.addEventListener('scroll', handleScroll);

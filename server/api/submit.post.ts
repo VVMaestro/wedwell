@@ -22,21 +22,20 @@ export default defineEventHandler(async (event) => {
 
     const pocketBaseUrl = config.public.pocketBaseUrl;
     const systemUserKey = config.systemUserKey;
+    const guestUserKey = config.guestUserKey;
+
+    if (guestUserKey !== authId) {
+        throw createError({
+            statusCode: 404,
+            statusMessage: 'Wrong auth',
+        });
+    }
 
     const pb = new PocketBase(pocketBaseUrl);
 
     await pb.collection('users').authWithPassword('system@system.com', systemUserKey);
 
-    const guest = await pb.collection('guests').getOne(authId);
-
-    if (!guest) {
-        throw createError({
-            statusCode: 404,
-            statusMessage: 'No guest found by this id',
-        });
-    }
-
-    await pb.collection('guests').update(authId as string, {
+    await pb.collection('guests').create({
         meal,
         name,
         attending,

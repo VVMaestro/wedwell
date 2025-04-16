@@ -16,5 +16,6 @@ export default defineNuxtConfig({
       pocketBaseUrl: '',
     },
     systemUserKey: '',
+    guestUserKey: '',
   },
 })
