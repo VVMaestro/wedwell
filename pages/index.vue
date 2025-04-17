@@ -182,7 +182,7 @@
 
 <template>
   <main class="flex min-h-screen flex-col font-wenkai">
-    <section class="relative flex flex-col items-center min-h-screen overflow-hidden py-16">
+    <section class="relative flex flex-col items-center min-h-screen overflow-hidden py-12">
       <div class="absolute inset-0 z-0">
         <nuxt-img
           src="/P6084338.JPG"
@@ -204,15 +204,13 @@
 
         <h1 class="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">Валентин & Марина</h1>
 
-        <p class="mb-2 text-2xl font-medium">Мы хотим, чтобы вы составили нам компанию</p>
-
-        <p class="mb-8 text-2xl font-light text-muted-foreground">на нашей свадьбе</p>
+        <p class="mb-8 text-2xl font-medium">Мы хотим, чтобы вы составили нам компанию <br> на нашей свадьбе</p>
 
         <div class="mb-10 flex flex-col items-center justify-center space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0">
           <div class="flex items-center space-x-2">
             <calendar-icon class="h-5 w-5 text-accent" />
 
-            <span class="text-lg">11 июня 2025 • 15:45</span>
+            <span class="text-lg font-bold">11 июня 2025 • 15:45</span>
           </div>
 
           <div class="hidden sm:block">•</div>
@@ -220,7 +218,7 @@
           <div class="flex items-center space-x-2">
             <map-pin-icon class="h-5 w-5 text-accent" />
 
-            <span class="text-lg">ЗАГС, Малыгина 85, Тюмень</span>
+            <span class="text-lg font-bold">ЗАГС, Малыгина 85, Тюмень</span>
           </div>
         </div>
         <el-button size="large" round type="primary" @click="onRSCVClick">
@@ -292,7 +290,7 @@
               <pen-line-icon class="stroke-accent" />
             </template>
 
-            <span class="font-bold text-lg">Церемония - Загс</span>
+            <span class="font-bold text-sm md:text-lg">Церемония - Загс</span>
           </el-button>
 
           <el-button
@@ -308,7 +306,7 @@
               <party-popper-icon class="stroke-accent" />
             </template>
 
-            <span class="font-bold text-lg">Банкет - Территория отдыха 'Тепло'</span>
+            <span class="font-bold text-sm md:text-lg">Банкет - Территория отдыха 'Тепло'</span>
           </el-button>
         </div>
       </div>
@@ -319,13 +317,14 @@
             location: {
               center: coordinates,
               zoom: zoom,
-              duration: 3000,
+              duration: 2000,
               easing: 'ease-in-out',
             },
-            behaviors: ['drag', 'pinchZoom'],
+            behaviors: ['drag', 'dblClick', 'oneFingerZoom'],
           }"
           width="100%"
           height="450px"
+          cursor-grab
         >
           <yandex-map-default-scheme-layer />
 
