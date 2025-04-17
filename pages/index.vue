@@ -153,12 +153,12 @@
           }
         });
 
-        explode.value = true;
-
         ElNotification.success({
           title: attending ? 'Отлично!' : 'Очень жаль',
-          message: attending ? 'Будем вас ждать' : 'Возможно вы передумаете'
+          message: attending ? 'Будем вас ждать' : 'Возможно вы передумаете',
         });
+
+        explode.value = true;
       });
     } catch (error) {
       ElNotification.error({ title: 'Непредвиденная ошибка', message: `${error}` });
@@ -320,7 +320,7 @@
               duration: 2000,
               easing: 'ease-in-out',
             },
-            behaviors: ['drag', 'dblClick', 'oneFingerZoom'],
+            behaviors: ['drag', 'dblClick', 'pinchZoom'],
           }"
           width="100%"
           height="450px"
@@ -392,7 +392,11 @@
                   :options="mealOptions"
                   :disabled="!form.attending"
                   placeholder="Выберите горячее блюдо"
-                />
+                >
+                  <template #default="{ item }">
+                    <span class="font-wenkai">{{ item.label }}</span>
+                  </template>
+                </el-select-v2>
               </el-form-item>
 
               <el-form-item label="Что предпочтёте пить?" class="font-bold" prop="drink">
@@ -403,7 +407,11 @@
                   multiple
                   :disabled="!form.attending"
                   placeholder="Выберите один или несколько напитков"
-                />
+                >
+                  <template #default="{ item }">
+                    <span class="font-wenkai">{{ item.label }}</span>
+                  </template>
+                </el-select-v2>
               </el-form-item>
 
               <el-form-item label="Комментарий" class="font-bold" prop="comment">
@@ -427,6 +435,8 @@
                       v-if="explode"
                       :particleCount="50"
                       :colors="['var(--flower)', 'var(--flower-2)', 'var(--flower-3)', 'var(--flower-4)', 'var(--flower-5)']"
+                      :stageHeight="400"
+                      :stageWidth="400"
                   />
                 </div>
               </el-form-item>
