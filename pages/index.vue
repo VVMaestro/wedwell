@@ -16,6 +16,7 @@
   import type { LngLat } from '@yandex/ymaps3-types';
   import type { IForm } from "~/types/IForm";
   import type {FormInstance, FormRules} from 'element-plus';
+  import * as timers from "node:timers";
 
   definePageMeta({
     middleware: ['auth'],
@@ -169,6 +170,28 @@
     rscv.value?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const toFirstCoords = () => {
+    zoom.value = 12;
+
+    setTimeout(() => {
+      coordinates.value = firstCoords;
+      markerCoordinates.value = firstMarkerCoords;
+
+      zoom.value = 16;
+    }, 500);
+  };
+
+  const toSecondCoords = () => {
+    zoom.value = 12;
+
+    setTimeout(() => {
+      coordinates.value = secondCoords;
+      markerCoordinates.value = secondCoords;
+
+      zoom.value = 15;
+    }, 500);
+  };
+
   onMounted(() => {
     window.addEventListener('scroll', handleScroll);
     startTimer();
@@ -202,9 +225,9 @@
           <heart-icon class="h-8 w-8 text-accent" />
         </div>
 
-        <h1 class="mb-6 text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">Валентин & Марина</h1>
+        <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">Валентин & Марина</h1>
 
-        <p class="mb-8 text-2xl font-medium">Мы хотим, чтобы вы составили нам компанию <br> на нашей свадьбе</p>
+        <p class="mb-8 text-xl md:2xl font-medium">Мы хотим, чтобы вы составили нам компанию <br> на нашей свадьбе</p>
 
         <div class="mb-10 flex flex-col items-center justify-center space-y-2 sm:flex-row sm:space-x-4 sm:space-y-0">
           <div class="flex items-center space-x-2">
@@ -279,10 +302,7 @@
         <div class="mx-auto max-w-2xl text-foreground flex flex-col items-center gap-2">
           <el-button
             size="large"
-            @click="() => {
-              coordinates = firstCoords;
-              markerCoordinates = firstMarkerCoords;
-            }"
+            @click="toFirstCoords"
             round
             plain
           >
@@ -295,10 +315,7 @@
 
           <el-button
             size="large"
-            @click="() => {
-              coordinates = secondCoords;
-              markerCoordinates = secondCoords;
-            }"
+            @click="toSecondCoords"
             round
             plain
           >
@@ -317,10 +334,10 @@
             location: {
               center: coordinates,
               zoom: zoom,
-              duration: 2000,
+              duration: 1000,
               easing: 'ease-in-out',
             },
-            behaviors: ['drag', 'dblClick', 'pinchZoom'],
+            behaviors: ['drag', 'dblClick', 'pinchZoom', 'scrollZoom'],
           }"
           width="100%"
           height="450px"
