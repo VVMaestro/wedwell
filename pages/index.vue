@@ -79,7 +79,7 @@
   ];
 
   const drinkOptions = [
-    {value: 'vodka', label: 'Водку'},
+    {value: 'vodka', label: 'Водка'},
     {value: 'white-vine', label: 'Белое Вино'},
     {value: 'red-vine', label: 'Красное Вино'},
     {value: 'whisky', label: 'Виски'},
@@ -134,7 +134,10 @@
 
       await formRef.value.validate(async (isValid) => {
         if (!isValid) {
-          ElNotification.error({ title: 'Проверьте правильно ли заполнена форма' });
+          ElNotification.error({
+            title: 'Проверьте, правильно ли заполнена форма',
+            position: "bottom-right"
+          });
 
           return;
         }
@@ -157,7 +160,7 @@
 
         ElNotification.success({
           title: attending ? 'Отлично!' : 'Очень жаль',
-          message: attending ? 'Будем вас ждать' : 'Возможно вы передумаете',
+          message: attending ? 'Будем вас ждать' : 'Возможно, вы передумаете',
           position: "bottom-right",
         });
 
