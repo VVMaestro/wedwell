@@ -481,7 +481,7 @@
                     :particleCount="50"
                     :colors="['var(--flower)', 'var(--flower-2)', 'var(--flower-3)', 'var(--flower-4)', 'var(--flower-5)']"
                     :stageHeight="1200"
-                    :stageWidth="500"
+                    :stageWidth="300"
                   />
                 </div>
               </el-form-item>
