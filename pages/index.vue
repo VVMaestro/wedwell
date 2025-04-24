@@ -217,7 +217,7 @@
   const margin = ref(0);
 
   const imageSettings = ref<ImageSettings>({
-    src: '/pet-friends.avif',
+    src: '/cat.jpg',
     width: 30,
     height: 30,
     // x: 10,
@@ -477,11 +477,11 @@
                   <el-button class="w-full" type="primary" @click="submitForm(form)">Ответить</el-button>
 
                   <confetti-explosion
-                      v-if="explode"
-                      :particleCount="50"
-                      :colors="['var(--flower)', 'var(--flower-2)', 'var(--flower-3)', 'var(--flower-4)', 'var(--flower-5)']"
-                      :stageHeight="400"
-                      :stageWidth="400"
+                    v-if="explode"
+                    :particleCount="50"
+                    :colors="['var(--flower)', 'var(--flower-2)', 'var(--flower-3)', 'var(--flower-4)', 'var(--flower-5)']"
+                    :stageHeight="400"
+                    :stageWidth="400"
                   />
                 </div>
               </el-form-item>
@@ -491,7 +491,7 @@
       </div>
     </section>
 
-    <section class="relative min-h-screen flex justify-center items-center flex-col">
+    <section class="relative min-h-screen flex justify-center items-center flex-col py-4">
       <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">🐾&nbsp;&nbsp;P.S.&nbsp;🐾</h1>
 
       <p class="mb-8 text-xl text-center md:2xl font-medium max-w-[48rem] px-2">
@@ -511,7 +511,7 @@
             :gradient-start-color="gradientStartColor"
             :gradient-end-color="gradientEndColor"
             :image-settings='imageSettings'
-            :size="300"
+            :size="200"
           />
         </a>
       </el-card>
