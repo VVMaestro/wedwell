@@ -198,13 +198,37 @@
     }, 500);
   };
 
+  // confetti
+  const confettiStageWidth = ref(300);
+  const confettiParticleCount = ref(50);
+
+  const handleResize = () => {
+    if (window.innerWidth > 300 && window.innerWidth < 600) {
+      confettiStageWidth.value = 290;
+      confettiParticleCount.value = 100;
+    } else if (window.innerWidth > 600 && window.innerWidth < 1000) {
+      confettiStageWidth.value = 590;
+      confettiParticleCount.value = 200;
+    } else if (window.innerWidth > 1000 && window.innerWidth < 1600) {
+      confettiStageWidth.value = 990;
+      confettiParticleCount.value = 300;
+    } else {
+      confettiStageWidth.value = 1590;
+      confettiParticleCount.value = 500;
+    }
+  };
+
   onMounted(() => {
     window.addEventListener('scroll', handleScroll);
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
     startTimer();
   })
 
   onBeforeUnmount(() => {
     window.removeEventListener('scroll', handleScroll);
+    window.removeEventListener('resize', handleResize);
     stopTimer();
   });
 
@@ -478,10 +502,10 @@
 
                   <confetti-explosion
                     v-if="explode"
-                    :particleCount="50"
+                    :particleCount="confettiParticleCount"
                     :colors="['var(--flower)', 'var(--flower-2)', 'var(--flower-3)', 'var(--flower-4)', 'var(--flower-5)']"
                     :stageHeight="1200"
-                    :stageWidth="300"
+                    :stageWidth="confettiStageWidth"
                   />
                 </div>
               </el-form-item>
@@ -495,7 +519,7 @@
       <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">🐾&nbsp;&nbsp;P.S.&nbsp;🐾</h1>
 
       <p class="mb-8 text-xl text-center md:2xl font-medium max-w-[48rem] px-2">
-        Мы решили начать нашу семейную жизнь с добра и помочь животным. Возможно, и вы захотите присоединиться :)<br>Цветы на свадьбе — это прекрасно, но мы не сможем наслаждаться их красотой долго. Предлагаем вам вместо покупки букета отправить помощь приюту "Лучший друг".
+        Мы решили начать нашу семейную жизнь с добра и помочь животным. Возможно, и вы захотите присоединиться!<br>Цветы на свадьбе — это прекрасно, но мы не сможем наслаждаться их красотой долго. Предлагаем вам вместо покупки букета отправить помощь приюту "Лучший друг".
       </p>
 
       <el-card>
