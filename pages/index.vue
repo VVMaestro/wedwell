@@ -16,7 +16,8 @@
   import type { LngLat } from '@yandex/ymaps3-types';
   import type { IForm } from "~/types/IForm";
   import type {FormInstance, FormRules} from 'element-plus';
-  import * as timers from "node:timers";
+  import QrcodeVue from 'qrcode.vue';
+  import type { Level, RenderAs, GradientType, ImageSettings } from 'qrcode.vue';
 
   definePageMeta({
     middleware: ['auth'],
@@ -35,6 +36,7 @@
   const zoom = ref(16);
 
   const rscv = useTemplateRef('rscv');
+  const qr = useTemplateRef('qr');
 
   const form = reactive<IForm>({
     name: '',
@@ -160,6 +162,10 @@
         });
 
         explode.value = true;
+
+        setTimeout(() => {
+          qr.value?.scrollIntoView({ behavior: 'smooth' });
+        }, 500);
       });
     } catch (error) {
       ElNotification.error({ title: 'Непредвиденная ошибка', message: `${error}` });
@@ -201,6 +207,28 @@
     window.removeEventListener('scroll', handleScroll);
     stopTimer();
   });
+
+  //qr
+  const value = ref('https://qr.nspk.ru/BS2A007DHBI4EJEL8GU9CGQ86OVNNIEA?type=01&bank=100000000008&crc=4C4F');
+  const level = ref<Level>('M');
+  const renderAs = ref<RenderAs>('svg');
+  const background = ref('#ffffff');
+  const foreground = ref('var(--foreground)');
+  const margin = ref(0);
+
+  const imageSettings = ref<ImageSettings>({
+    src: '/pet-friends.avif',
+    width: 30,
+    height: 30,
+    // x: 10,
+    // y: 10,
+    excavate: true,
+  });
+
+  const gradient = ref(false);
+  const gradientType = ref<GradientType>('linear');
+  const gradientStartColor = ref('#000000');
+  const gradientEndColor = ref('#38bdf8');
 </script>
 
 <template>
@@ -233,7 +261,7 @@
           <div class="flex items-center space-x-2">
             <calendar-icon class="h-5 w-5 text-accent" />
 
-            <span class="text-lg font-bold">11 июня 2025 • 15:45</span>
+            <span class="text-lg font-bold">11 июня 2025 • 16:00</span>
           </div>
 
           <div class="hidden sm:block">•</div>
@@ -461,6 +489,32 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="relative min-h-screen flex justify-center items-center flex-col">
+      <h1 class="mb-6 text-3xl font-bold tracking-tight sm:text-5xl md:text-6xl">🐾&nbsp;&nbsp;P.S.&nbsp;🐾</h1>
+
+      <p class="mb-8 text-xl text-center md:2xl font-medium max-w-[48rem] px-2">
+        Цветы на свадьбе - это прекрасно, но мы не сможем наслаждаться их красотой долго. Мы решили начать нашу семейную жизнь с добра и помочь животным. Возможно и вы захотите присоединиться :) Предлагаем вам вместо покупки букета отправить помощь приюту "Лучший друг".
+      </p>
+
+      <el-card>
+        <a ref="qr" href="https://qr.nspk.ru/BS2A007DHBI4EJEL8GU9CGQ86OVNNIEA?type=01&bank=100000000008&crc=4C4F">
+          <qrcode-vue
+            :value="value"
+            :level="level"
+            :render-as="renderAs"
+            :background="background"
+            :foreground='foreground'
+            :gradient="gradient"
+            :gradient-type="gradientType"
+            :gradient-start-color="gradientStartColor"
+            :gradient-end-color="gradientEndColor"
+            :image-settings='imageSettings'
+            :size="300"
+          />
+        </a>
+      </el-card>
     </section>
   </main>
 </template>
