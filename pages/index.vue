@@ -106,7 +106,7 @@
   const secondsLeft = computed(() => Math.floor((epochLeft.value - daysLeft.value * MS_IN_DAY - hoursLeft.value * MS_IN_HOUR - minutesLeft.value * MS_IN_MINUTE) / MS_IN_SECOND))
 
   const startTimer = () => {
-    epochLeft.value = Math.max(Date.UTC(2025, 5, 11, 11, 0, 0, 0) - Date.now(), 0);
+    epochLeft.value = Math.max(Date.UTC(2025, 5, 11, 16, 0, 0, 0) - Date.now(), 0);
 
     // @ts-ignore:disable-next-line
     timer = setInterval(() => {
@@ -289,7 +289,7 @@
           <div class="flex items-center space-x-2">
             <calendar-icon class="h-5 w-5 text-accent" />
 
-            <span class="text-lg font-bold">11 июня 2025 • 16:00</span>
+            <span class="text-lg font-bold">11 июня 2025 • 15:30</span>
           </div>
 
           <div class="hidden sm:block">•</div>
