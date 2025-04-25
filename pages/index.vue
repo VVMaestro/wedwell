@@ -83,6 +83,7 @@
     {value: 'white-vine', label: 'Белое Вино'},
     {value: 'red-vine', label: 'Красное Вино'},
     {value: 'whisky', label: 'Виски'},
+    {value: 'nonalco', label: 'Безалкогольные напитки'}
   ];
 
   const scroll = ref(0);
